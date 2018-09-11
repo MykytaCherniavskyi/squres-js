@@ -1,0 +1,48 @@
+.squeres-folder {
+    display: flex;
+    margin: 100px;
+    flex-direction: column;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.squere {
+    display: inline-block;
+    padding: 25px;
+    color: black;
+    margin: 1px;
+}
+
+.center {
+    border: 1px solid lightsteelblue;
+}
+
+.squere-center {
+    background-color: deepskyblue;
+}
+
+.squere-minus {
+    background-color: rgba(255,0,0,1);
+}
+
+.squere-minus:hover {
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: rgba(255,0,0,0.6);
+}
+
+.squere-plus {
+    background-color: yellow;
+}
+
+.squere-plus:hover {
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: rgba(255,255,0,0.6);
+}
+
+.pl-50 {
+    padding-left: 50px;
+}
