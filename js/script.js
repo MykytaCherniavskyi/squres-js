@@ -12,8 +12,20 @@ window.onload = (e) => {
     // squeres array
     let rows = document.getElementsByClassName('row');
 
-    console.dir(minusLeft.parentElement);
-    console.log(minusLeft.parentElement.offsetHeight + 100);
+    // console.dir(minusLeft.parentElement);
+    // console.log(minusLeft.parentElement.offsetHeight + 100);
+
+    console.log(rows);
+    console.log(rows[3].offsetTop);
+    console.log(rows[3].getBoundingClientRect().top);
+    console.log(rows[3]);
+    console.log(center.offsetTop);
+    console.log(center.getBoundingClientRect());
+    console.log(center);
+
+    //ф
+    console.log(rows[3].getBoundingClientRect().top - center.getBoundingClientRect().top);
+
 
     //Вселенский смысл в том, чтобы взять высоту на которой расположен дочерний эллемент
     // в родителе и задать такой же offset для контрола для его перемещения.
