@@ -12,8 +12,12 @@ window.onload = (e) => {
     // squeres array
     let rows = document.getElementsByClassName('row');
 
-    //visibleMinus
+    console.dir(minusLeft.parentElement);
+    console.log(minusLeft.parentElement.offsetHeight + 100);
 
+    //Вселенский смысл в том, чтобы взять высоту на которой расположен дочерний эллемент
+    // в родителе и задать такой же offset для контрола для его перемещения.
+    //
 
     //addRows
     plusBottom.addEventListener('click', (e) => {
@@ -32,7 +36,11 @@ window.onload = (e) => {
             row.appendChild(singleSquere);
             row.appendChild(spacing);
             console.log(rows[0].childNodes[3]);
-
+            if  (typeof rows[0].childNodes[3] === 'undefined') {
+                minusTop.style.visibility = 'hidden';
+            } else {
+                minusTop.style.visibility = 'visible';
+            }
         }
 
 

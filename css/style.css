@@ -25,7 +25,23 @@
 
 .squere-minus {
     background-color: rgba(255,0,0,1);
+    position: relative;
 }
+
+.squere-minus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    margin-left: -10px;
+    margin-top: -2px;
+    border-radius: 50px;
+    width: 20px;
+    height: 4px;
+    background-color: white;
+}
+
+
+
 
 .squere-minus:hover {
     cursor: pointer;
