@@ -8,28 +8,10 @@ window.onload = (e) => {
 
     //environment
     let center = document.querySelector('.center');
+    let offsetLeftMinus = 0;
 
     // squeres array
     let rows = document.getElementsByClassName('row');
-
-    // console.dir(minusLeft.parentElement);
-    // console.log(minusLeft.parentElement.offsetHeight + 100);
-
-    console.log(rows);
-    console.log(rows[3].offsetTop);
-    console.log(rows[3].getBoundingClientRect().top);
-    console.log(rows[3]);
-    console.log(center.offsetTop);
-    console.log(center.getBoundingClientRect());
-    console.log(center);
-
-    //ф
-    console.log(rows[3].getBoundingClientRect().top - center.getBoundingClientRect().top);
-
-
-    //Вселенский смысл в том, чтобы взять высоту на которой расположен дочерний эллемент
-    // в родителе и задать такой же offset для контрола для его перемещения.
-    //
 
     //addRows
     plusBottom.addEventListener('click', (e) => {
@@ -91,16 +73,45 @@ window.onload = (e) => {
         console.log(rows[0].childNodes[3]);
     });
 
+    let offsetTopMinus = 0;
+
+    //visible or hidden minusControl buttons
+    center.addEventListener('mouseover', (e) => {
+        minusTop.style.visibility = 'visible';
+        minusLeft.style.visibility = 'visible';
+        if (e.target.nodeType === 1) {
+            offsetLeftMinus = e.target.getBoundingClientRect().top - center.getBoundingClientRect().top;
+            minusLeft.style.top = offsetLeftMinus + 'px';
+        }
+
+        if (e.target.nodeType === 1) {
+            console.log(e.target);
+            offsetTopMinus = e.target.getBoundingClientRect().left - center.getBoundingClientRect().left;
+            minusTop.style.left = offsetTopMinus + 'px';
+        }
+
+    });
+    center.addEventListener('mouseout', (e) => {
+        minusTop.style.visibility = 'hidden';
+        minusLeft.style.visibility = 'hidden';
+    });
+
+    minusLeft.addEventListener('mouseover', (e) => {
+        minusTop.style.visibility = 'visible';
+        minusLeft.style.visibility = 'visible';
+    });
+    minusLeft.addEventListener('mouseout', (e) => {
+        minusTop.style.visibility = 'hidden';
+        minusLeft.style.visibility = 'hidden';
+    });
+
+    minusTop.addEventListener('mouseover', (e) => {
+        minusTop.style.visibility = 'visible';
+        minusLeft.style.visibility = 'visible';
+    });
+    minusTop.addEventListener('mouseout', (e) => {
+        minusTop.style.visibility = 'hidden';
+        minusLeft.style.visibility = 'hidden';
+    });
+
 };
-
-
-//Кастыльный блок
-// для коректной работы нужно указывать в continue метку outer на внешнем цикле
-/*for (let x = 0; x < innerRow.childNodes.length; x++) {
-    let item = innerRow.childNodes[x];
-    if (item.nodeName === "DIV") {
-        let singleSquere = document.querySelector('.squere-center').cloneNode(true);
-        item.parentNode.appendChild(singleSquere);
-        continue outer;
-    }
-}*/
