@@ -13,6 +13,9 @@ window.onload = (e) => {
     // squeres array
     let rows = document.getElementsByClassName('row');
 
+    center.removeChild(center.childNodes[center.childNodes.length - 1]);
+    console.log(center.childNodes);
+
     //addRows
     plusBottom.addEventListener('click', (e) => {
         let row = rows[0].cloneNode(true);

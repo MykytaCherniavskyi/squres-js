@@ -10,24 +10,36 @@
 
 .left {
     position: relative;
+    padding-right: 1px;
 }
 
-.top {
+.right {
+    padding-top: 2px;
+    padding-left: 1px;
+}
+
+.up {
     position: relative;
+    bottom: -3px;
 }
 
 .squere {
     display: inline-block;
     padding: 25px;
     color: black;
-    margin: 1px;
 }
 
 .center {
     border: 1px solid lightsteelblue;
+    padding: 1px;
+}
+
+.row {
+    font-size: 0;
 }
 
 .squere-center {
+    margin: 1px;
     background-color: deepskyblue;
 }
 
@@ -42,11 +54,10 @@
     content: '';
     position: absolute;
     top: 50%;
-    margin-left: -10px;
-    margin-top: -2px;
-    border-radius: 50px;
-    width: 20px;
-    height: 4px;
+    margin-left: -7px;
+    margin-top: -1.5px;
+    width: 14px;
+    height: 3px;
     background-color: white;
 }
 
@@ -54,45 +65,47 @@
     content: '';
     position: absolute;
     top: 50%;
-    margin-left: -10px;
-    margin-top: -2px;
-    border-radius: 50px;
-    width: 20px;
-    height: 4px;
-    background-color: #e0e0e0;
+    margin-left: -7px;
+    margin-top: -1.5px;
+    width: 14px;
+    height: 3px;
+    background-color: white;
 }
 
 .squere-plus::before{
     content: '';
     position: absolute;
     top: 50%;
-    margin-left: -10px;
-    margin-top: -2px;
-    border-radius: 50px;
-    width: 20px;
-    height: 4px;
+    margin-left: -7px;
+    margin-top: -1.5px;
+    width: 14px;
+    height: 3px;
     transform: rotate(90deg);
-    background-color: #e0e0e0;
+    background-color: white;
 }
 
 
 .squere-minus:hover {
     cursor: pointer;
     transition: all 0.2s;
-    background-color: rgba(255,0,0,0.6);
+    background-color: #d5494d;
 }
 
 .squere-plus {
-    background-color: yellow;
+    background-color: #faa427;
     position: relative;
 }
 
 .squere-plus:hover {
     cursor: pointer;
     transition: all 0.2s;
-    background-color: rgba(255,255,0,0.6);
+    background-color: #fac060;
 }
 
 .pl-50 {
-    padding-left: 50px;
+    padding-left: 53px;
+}
+
+.mt-1 {
+    margin-top: 1px;
 }
