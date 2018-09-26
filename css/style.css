@@ -1,34 +1,64 @@
+/*Main styles*/
 .squeres-folder {
     display: flex;
     margin: 100px;
     flex-direction: column;
 }
 
+.squere {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    color: black;
+}
+
+.squere-minus {
+    /*visibility: hidden;*/
+    transition: all 0.2s;
+    background-color: rgba(255,0,0,1);
+    position: relative;
+}
+
+.squere-plus {
+    background-color: #faa427;
+    position: relative;
+}
+
+/*Controls wrappers*/
+
+.up, .left, .right, .bottom {
+    position: relative;
+}
+
+.up, .bottom {
+    transform: translateX(50px);
+}
+
+.up .squere {
+    left: 3px;
+    bottom: -3px;
+}
+
+.left .squere {
+    top: 3px;
+    left: -1px;
+}
+
 .wrapper {
     display: flex;
 }
 
-.left {
-    position: relative;
-    padding-right: 1px;
+.right .squere {
+    left: 1px;
+    top: 3px;
 }
 
-.right {
-    padding-top: 2px;
-    padding-left: 1px;
+.bottom .squere {
+    top: 1px;
+    left: 3px;
 }
 
-.up {
-    position: relative;
-    bottom: -3px;
-}
-
-.squere {
-    display: inline-block;
-    padding: 25px;
-    color: black;
-}
-
+/*Inner wrapper*/
 .center {
     border: 1px solid lightsteelblue;
     padding: 1px;
@@ -38,52 +68,25 @@
     font-size: 0;
 }
 
-.squere-center {
+.row .squere {
     margin: 1px;
     background-color: deepskyblue;
 }
 
-.squere-minus {
-    visibility: hidden;
-    transition: all 0.2s;
-    background-color: rgba(255,0,0,1);
-    position: relative;
-}
-
-.squere-minus::after {
+/*Decorative styles for squeres*/
+.squere-minus::after,
+.squere-plus::after,
+.squere-plus::before {
     content: '';
     position: absolute;
     top: 50%;
+    left: 50%;
     margin-left: -7px;
     margin-top: -1.5px;
     width: 14px;
     height: 3px;
     background-color: white;
 }
-
-.squere-plus::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    margin-left: -7px;
-    margin-top: -1.5px;
-    width: 14px;
-    height: 3px;
-    background-color: white;
-}
-
-.squere-plus::before{
-    content: '';
-    position: absolute;
-    top: 50%;
-    margin-left: -7px;
-    margin-top: -1.5px;
-    width: 14px;
-    height: 3px;
-    transform: rotate(90deg);
-    background-color: white;
-}
-
 
 .squere-minus:hover {
     cursor: pointer;
@@ -91,9 +94,8 @@
     background-color: #d5494d;
 }
 
-.squere-plus {
-    background-color: #faa427;
-    position: relative;
+.squere-plus::before {
+    transform: rotate(90deg);
 }
 
 .squere-plus:hover {
@@ -102,10 +104,5 @@
     background-color: #fac060;
 }
 
-.pl-50 {
-    padding-left: 53px;
-}
 
-.mt-1 {
-    margin-top: 1px;
-}
+

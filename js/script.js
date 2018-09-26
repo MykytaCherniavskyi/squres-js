@@ -13,8 +13,42 @@ window.onload = (e) => {
     // squeres array
     let rows = document.getElementsByClassName('row');
 
-    center.removeChild(center.childNodes[center.childNodes.length - 1]);
-    console.log(center.childNodes);
+//Временно не активно
+/*    document.body.onmouseover = function (e) {
+        console.log(e.target);
+        let target = e.target || e.srcElement;
+        let tdParent = target.parentNode;
+        let attrInnerSQ = document.getElementsByClassName('row')[0].children[0].getAttribute('data-action');
+
+        //фильтруем объекты TD
+        if (target.hasAttribute('spy')) {
+            //console.log("squere");
+            target.onclick = function () {
+                //console.log("click squere");
+                tdParent.removeChild(target); //удаляем текущий объект
+            }
+
+        }
+    };*/
+
+
+    //фильтрация чисто элементов центральной таблицы (контролы удалены)
+    var testElements = document.getElementsByClassName('squere');
+    var testDivs = Array.prototype.filter.call(testElements, function(testElement){
+        return testElement.className === 'squere';
+    });
+
+
+    //for future fichers
+    let centerSize =
+        {
+          width: center.getBoundingClientRect().width,
+          height: center.getBoundingClientRect().height
+        };
+
+    let up = minusTop.parentElement;
+    up.style.width = centerSize.width + 'px';
+    //console.log(up.width);
 
     //addRows
     plusBottom.addEventListener('click', (e) => {
@@ -28,11 +62,8 @@ window.onload = (e) => {
     plusRight.addEventListener('click', (e) => {
         for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
-            let singleSquere = document.querySelector('.squere-center').cloneNode(true);
-            let spacing = center.childNodes[0].cloneNode(true);
+            let singleSquere = document.querySelector('.row .squere').cloneNode(true);
             row.appendChild(singleSquere);
-            row.appendChild(spacing);
-            console.log(rows[0].childNodes[3]);
             if  (typeof rows[0].childNodes[3] === 'undefined') {
                 minusTop.style.visibility = 'hidden';
             } else {
@@ -49,54 +80,60 @@ window.onload = (e) => {
             return false;
         }
 
-        center.removeChild(rows[rows.length - 1]);
+        center.removeChild(currentRow);
 
         if (rows.length === 1) {
             minusLeft.style.visibility = 'hidden';
         }
 
     });
-    //removeColumn
+    //removeColumn разобрпать
     minusTop.addEventListener('click', (e) => {
         outer :for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
             if (row.childNodes.length <= 3) {
                 return false;
             }
-            for (let x = 0; x < row.childNodes.length; x++) {
-                let item = row.childNodes[x];
-                item.parentNode.removeChild(row.childNodes[row.childNodes.length - 1]);
-                item.parentNode.removeChild(row.childNodes[row.childNodes.length - 1]);
-                if (row.childNodes.length <= 3) {
+            for (let x = 0; x < row.children.length; x++) {
+                let item = row.children[x];
+                item.remove();
+                if (row.children.length <= 1) {
                     minusTop.style.visibility = 'hidden';
                 }
                 continue outer;
             }
         }
-        console.log(rows[0].childNodes[3]);
     });
 
     let offsetTopMinus = 0;
+    let currentRow;
 
     //visible or hidden minusControl buttons
     center.addEventListener('mouseover', (e) => {
         minusTop.style.visibility = 'visible';
         minusLeft.style.visibility = 'visible';
-        if (e.target.nodeType === 1) {
-            offsetLeftMinus = e.target.getBoundingClientRect().top - center.getBoundingClientRect().top;
-            minusLeft.style.top = offsetLeftMinus + 'px';
+
+        let targetAttr = e.target.getAttribute('data-action');
+
+        if (targetAttr) {
+            currentRow = e.target.parentNode;
+
+            let centerChildren = center.children;
+            // console.log(centerChildren.item(currentRow));
+            console.dir(currentRow);
         }
 
-        if (e.target.nodeType === 1) {
-            console.log(e.target);
-            offsetTopMinus = e.target.getBoundingClientRect().left - center.getBoundingClientRect().left;
-            minusTop.style.left = offsetTopMinus + 'px';
-        }
+        offsetLeftMinus = e.target.getBoundingClientRect().top - center.getBoundingClientRect().top;
+        minusLeft.style.top = offsetLeftMinus + 'px';
+
+        offsetTopMinus = e.target.getBoundingClientRect().left - center.getBoundingClientRect().left;
+        minusTop.style.left = offsetTopMinus + 'px';
 
     });
     center.addEventListener('mouseout', (e) => {
         minusTop.style.visibility = 'hidden';
         minusLeft.style.visibility = 'hidden';
+        //console.log(currentRow);
     });
 
     minusLeft.addEventListener('mouseover', (e) => {
