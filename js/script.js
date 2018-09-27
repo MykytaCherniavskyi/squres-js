@@ -9,6 +9,7 @@ window.onload = (e) => {
     //environment
     let center = document.querySelector('.center');
     let offsetLeftMinus = 0;
+    let offsets;
 
     // squeres array
     let rows = document.getElementsByClassName('row');
@@ -48,7 +49,6 @@ window.onload = (e) => {
 
     let up = minusTop.parentElement;
     up.style.width = centerSize.width + 'px';
-    //console.log(up.width);
 
     //addRows
     plusBottom.addEventListener('click', (e) => {
@@ -99,25 +99,55 @@ window.onload = (e) => {
         }
 
     });
+
+    let currentInnerDiv = center.children[0].children[0];
+    let itemPlace = 0;
+    let naiberItemPlace = 1;
     //removeColumn разобрпать
     minusTop.addEventListener('click', (e) => {
-        outer :for (let i = 0; i < rows.length; i++) {
+
+
+        //Нахождение текущего элемента в массиве
+        itemPlace = 0;
+        naiberItemPlace = 1;
+        //TODO доделать отслеживания по всей таблице, а не только по первому ряду
+        if (currentInnerDiv != null) {
+                for (let x = 0; x < rows[0].children.length; x++) {
+                    let item = rows[0].children[x];
+                    if (item !== currentInnerDiv) {
+                        itemPlace++;
+                    } else  {
+                        naiberItemPlace = itemPlace + 1;
+                    }
+                }
+
+        }
+
+
+
+        //Удаление конкретного div-а
+        for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
-            if (row.childNodes.length <= 3) {
+
+            if (row.children.length <= 1) {
                 return false;
             }
-            for (let x = 0; x < row.children.length; x++) {
-                let item = row.children[x];
-                item.remove();
-                if (row.children.length <= 1) {
-                    minusTop.style.visibility = 'hidden';
-                }
-                continue outer;
+
+            let item = row.children[itemPlace];
+            console.log(item);
+            console.log(row.children[naiberItemPlace]);
+            console.log("Итерация");
+            item.remove();
+            if (row.children.length <= 1) {
+                minusTop.style.visibility = 'hidden';
             }
         }
+
+        itemPlace = naiberItemPlace;
+        naiberItemPlace = 0;
+
     });
 
-    let offsetTopMinus = 0;
     let currentRow = center.firstElementChild;
 
     //visible or hidden minusControl buttons
@@ -130,11 +160,7 @@ window.onload = (e) => {
         // Проверяю, что фокус именно на эллементе таблицы
         if (targetAttr) {
             currentRow = e.target.parentNode;
-
-
-            // console.log(centerChildren.item(currentRow));
-            // console.log(currentRow);
-            // console.log(currentRow.nextElementSibling);
+            currentInnerDiv = e.target;
         }
 
         offsets =
