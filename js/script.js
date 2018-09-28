@@ -14,28 +14,9 @@ window.onload = (e) => {
     // squeres array
     let rows = document.getElementsByClassName('row');
 
-//Временно не активно
-/*    document.body.onmouseover = function (e) {
-        console.log(e.target);
-        let target = e.target || e.srcElement;
-        let tdParent = target.parentNode;
-        let attrInnerSQ = document.getElementsByClassName('row')[0].children[0].getAttribute('data-action');
-
-        //фильтруем объекты TD
-        if (target.hasAttribute('spy')) {
-            //console.log("squere");
-            target.onclick = function () {
-                //console.log("click squere");
-                tdParent.removeChild(target); //удаляем текущий объект
-            }
-
-        }
-    };*/
-
-
     //фильтрация чисто элементов центральной таблицы (контролы удалены)
-    var testElements = document.getElementsByClassName('squere');
-    var testDivs = Array.prototype.filter.call(testElements, function(testElement){
+    let testElements = document.getElementsByClassName('squere');
+    let testDivs = Array.prototype.filter.call(testElements, function(testElement){
         return testElement.className === 'squere';
     });
 
@@ -71,7 +52,6 @@ window.onload = (e) => {
             }
         }
 
-
     });
 
     let nextRow = center.firstElementChild;
@@ -82,7 +62,7 @@ window.onload = (e) => {
             return false;
         }
 
-        //Динамическое удаление
+        //Удаление
         if (currentRow != null) {
             nextRow = currentRow.nextElementSibling;
         }
@@ -91,7 +71,20 @@ window.onload = (e) => {
             center.removeChild(currentRow);
         }
 
+        // Удаление последней строки и смещение контрола
+        if (nextRow == null) {
+
+            offsets.offsetLeft = e.target.getBoundingClientRect().top - center.getBoundingClientRect().top;
+            minusLeft.style.top = offsets.offsetLeft - 52 + 'px';
+
+            nextRow = rows[rows.length - 1];
+        }
+
         currentRow = nextRow;
+
+
+
+        currentInnerDiv = center.children[0].children[0];
 
         //Скрытие контрола при последней строке
         if (rows.length === 1) {
@@ -100,32 +93,32 @@ window.onload = (e) => {
 
     });
 
+
     let currentInnerDiv = center.children[0].children[0];
     let itemPlace = 0;
-    let naiberItemPlace = 1;
-    //removeColumn разобрпать
+    //removeColumn
     minusTop.addEventListener('click', (e) => {
 
 
-        //Нахождение текущего элемента в массиве
-        itemPlace = 0;
-        naiberItemPlace = 1;
-        //TODO доделать отслеживания по всей таблице, а не только по первому ряду
+
+        //Нахождение текущего элемента в коллекции
         if (currentInnerDiv != null) {
-                for (let x = 0; x < rows[0].children.length; x++) {
-                    let item = rows[0].children[x];
+           outer: for (let i = 0; i < rows.length; i++) {
+               let row = rows[i];
+
+               itemPlace = 0;
+                for (let x = 0; x < row.children.length; x++) {
+                    let item = row.children[x];
                     if (item !== currentInnerDiv) {
                         itemPlace++;
                     } else  {
-                        naiberItemPlace = itemPlace + 1;
+                        break outer;
                     }
                 }
 
+            }
         }
 
-
-
-        //Удаление конкретного div-а
         for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
 
@@ -134,18 +127,21 @@ window.onload = (e) => {
             }
 
             let item = row.children[itemPlace];
-            console.log(item);
-            console.log(row.children[naiberItemPlace]);
-            console.log("Итерация");
-            item.remove();
-            if (row.children.length <= 1) {
-                minusTop.style.visibility = 'hidden';
+
+            if (item == null) item = row.children[row.children.length - 1];
+
+
+            if (item.nextElementSibling == null) {
+                offsets.offsetTop = e.target.getBoundingClientRect().left - center.getBoundingClientRect().left;
+                minusTop.style.left = offsets.offsetTop - 52 + 'px';
             }
+
+            item.remove();
+
+
         }
 
-        itemPlace = naiberItemPlace;
-        naiberItemPlace = 0;
-
+        currentInnerDiv = null;
     });
 
     let currentRow = center.firstElementChild;
@@ -155,25 +151,30 @@ window.onload = (e) => {
         minusTop.style.visibility = 'visible';
         minusLeft.style.visibility = 'visible';
 
-        let targetAttr = e.target.getAttribute('data-action');
-
-        // Проверяю, что фокус именно на эллементе таблицы
-        if (targetAttr) {
-            currentRow = e.target.parentNode;
-            currentInnerDiv = e.target;
-        }
-
         offsets =
             {
                 offsetLeft: e.target.getBoundingClientRect().top - center.getBoundingClientRect().top,
                 offsetTop: e.target.getBoundingClientRect().left - center.getBoundingClientRect().left
             };
 
-        minusLeft.style.top = offsets.offsetLeft + 'px';
+        let targetAttr = e.target.getAttribute('data-action');
 
-        minusTop.style.left = offsets.offsetTop + 'px';
+
+
+        // Проверяю, что фокус именно на эллементе таблицы
+        if (targetAttr) {
+            currentRow = e.target.parentNode;
+            currentInnerDiv = e.target;
+
+            minusTop.style.left = offsets.offsetTop + 'px';
+            minusLeft.style.top = offsets.offsetLeft + 'px';
+        }
 
     });
+
+    //TODO чтобы избавиться от data-action можно использовать часть кода написанного с использованием prototype.filter.call
+    // делать обход массива и проверять равен ли e.target текущему эллементу массива
+
 
     // document.body.onmouseover = function (e) {
     //     console.log(e.target);
