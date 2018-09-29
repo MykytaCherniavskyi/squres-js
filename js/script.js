@@ -10,6 +10,8 @@ window.onload = (e) => {
     let center = document.querySelector('.center');
     let offsetLeftMinus = 0;
     let offsets;
+    let invisibleTop = false;
+    let invisibleLeft = false;
 
     // squeres array
     let rows = document.getElementsByClassName('row');
@@ -35,8 +37,9 @@ window.onload = (e) => {
     plusBottom.addEventListener('click', (e) => {
         let row = rows[0].cloneNode(true);
         center.appendChild(row);
-        if (rows.length === 2) {
+        if (rows.length > 1) {
             minusLeft.style.visibility = 'visible';
+            invisibleLeft = false;
         }
     });
     //addColumn
@@ -45,10 +48,9 @@ window.onload = (e) => {
             let row = rows[i];
             let singleSquere = document.querySelector('.row .squere').cloneNode(true);
             row.appendChild(singleSquere);
-            if  (typeof rows[0].childNodes[3] === 'undefined') {
-                minusTop.style.visibility = 'hidden';
-            } else {
+            if (rows[0].children.length > 1) {
                 minusTop.style.visibility = 'visible';
+                invisibleTop = false;
             }
         }
 
@@ -89,6 +91,7 @@ window.onload = (e) => {
         //Скрытие контрола при последней строке
         if (rows.length === 1) {
             minusLeft.style.visibility = 'hidden';
+            invisibleLeft = true;
         }
 
     });
@@ -123,6 +126,8 @@ window.onload = (e) => {
             let row = rows[i];
 
             if (row.children.length <= 1) {
+                minusTop.style.visibility = 'hidden';
+                invisible = false;
                 return false;
             }
 
@@ -138,6 +143,10 @@ window.onload = (e) => {
 
             item.remove();
 
+            if (row.children.length <= 1) {
+                minusTop.style.visibility = 'hidden';
+                invisibleTop = true;
+            }
 
         }
 
@@ -148,8 +157,9 @@ window.onload = (e) => {
 
     //visible or hidden minusControl buttons
     center.addEventListener('mouseover', (e) => {
-        minusTop.style.visibility = 'visible';
-        minusLeft.style.visibility = 'visible';
+
+        checkVisible();
+
 
         offsets =
             {
@@ -171,50 +181,51 @@ window.onload = (e) => {
         }
 
     });
+    center.addEventListener('mouseout', (e) => {
+
+        minusTop.style.visibility = 'hidden';
+        minusLeft.style.visibility = 'hidden';
+
+    });
+
 
     //TODO чтобы избавиться от data-action можно использовать часть кода написанного с использованием prototype.filter.call
     // делать обход массива и проверять равен ли e.target текущему эллементу массива
 
 
-    // document.body.onmouseover = function (e) {
-    //     console.log(e.target);
-    //     let target = e.target || e.srcElement;
-    //     let tdParent = target.parentNode;
-    //     let attrInnerSQ = document.getElementsByClassName('row')[0].children[0].getAttribute('data-action');
-    //
-    //     //фильтруем объекты TD
-    //     if (target.hasAttribute('spy')) {
-    //         //console.log("squere");
-    //         target.onclick = function () {
-    //             //console.log("click squere");
-    //             tdParent.removeChild(target); //удаляем текущий объект
-    //         }
-    //
-    //     }
-    // };
+    center.addEventListener('mouseout', (e) => {
+        minusTop.style.visibility = 'hidden';
+        minusLeft.style.visibility = 'hidden';
+    });
 
-    // center.addEventListener('mouseout', (e) => {
-    //     minusTop.style.visibility = 'hidden';
-    //     minusLeft.style.visibility = 'hidden';
-    //     //console.log(currentRow);
-    // });
-    //
-    // minusLeft.addEventListener('mouseover', (e) => {
-    //     minusTop.style.visibility = 'visible';
-    //     minusLeft.style.visibility = 'visible';
-    // });
-    // minusLeft.addEventListener('mouseout', (e) => {
-    //     minusTop.style.visibility = 'hidden';
-    //     minusLeft.style.visibility = 'hidden';
-    // });
-    //
-    // minusTop.addEventListener('mouseover', (e) => {
-    //     minusTop.style.visibility = 'visible';
-    //     minusLeft.style.visibility = 'visible';
-    // });
-    // minusTop.addEventListener('mouseout', (e) => {
-    //     minusTop.style.visibility = 'hidden';
-    //     minusLeft.style.visibility = 'hidden';
-    // });
+    minusLeft.addEventListener('mouseover', (e) => {
+        checkVisible();
+    });
+    minusLeft.addEventListener('mouseout', (e) => {
+        minusTop.style.visibility = 'hidden';
+        minusLeft.style.visibility = 'hidden';
+    });
+
+    minusTop.addEventListener('mouseover', (e) => {
+        checkVisible();
+    });
+    minusTop.addEventListener('mouseout', (e) => {
+        minusTop.style.visibility = 'hidden';
+        minusLeft.style.visibility = 'hidden';
+    });
+
+    function checkVisible() {
+        if (invisibleTop) {
+            minusTop.style.visibility = 'hidden';
+        } else {
+            minusTop.style.visibility = 'visible';
+        }
+
+        if (invisibleLeft) {
+            minusLeft.style.visibility = 'hidden';
+        } else {
+            minusLeft.style.visibility = 'visible';
+        }
+    }
 
 };
