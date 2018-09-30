@@ -8,30 +8,12 @@ window.onload = (e) => {
 
     //environment
     let center = document.querySelector('.center');
-    let offsetLeftMinus = 0;
     let offsets;
     let invisibleTop = false;
     let invisibleLeft = false;
 
     // squeres array
     let rows = document.getElementsByClassName('row');
-
-    //фильтрация чисто элементов центральной таблицы (контролы удалены)
-    let testElements = document.getElementsByClassName('squere');
-    let testDivs = Array.prototype.filter.call(testElements, function(testElement){
-        return testElement.className === 'squere';
-    });
-
-
-    //for future fichers
-    let centerSize =
-        {
-          width: center.getBoundingClientRect().width,
-          height: center.getBoundingClientRect().height
-        };
-
-    let up = minusTop.parentElement;
-    up.style.width = centerSize.width + 'px';
 
     //addRows
     plusBottom.addEventListener('click', (e) => {
@@ -127,7 +109,6 @@ window.onload = (e) => {
 
             if (row.children.length <= 1) {
                 minusTop.style.visibility = 'hidden';
-                invisible = false;
                 return false;
             }
 
@@ -167,17 +148,26 @@ window.onload = (e) => {
                 offsetTop: e.target.getBoundingClientRect().left - center.getBoundingClientRect().left
             };
 
-        let targetAttr = e.target.getAttribute('data-action');
 
-
+        //Фильтрация чисто элементов центральной таблицы (контролы удалены)
+        let allSquares = document.getElementsByClassName('squere');
+        let inCenterSquares = Array.prototype.filter.call(allSquares, function(allSquares){
+            return allSquares.className === 'squere';
+        });
 
         // Проверяю, что фокус именно на эллементе таблицы
-        if (targetAttr) {
-            currentRow = e.target.parentNode;
-            currentInnerDiv = e.target;
+        for (let i = 0; i < inCenterSquares.length; i++) {
 
-            minusTop.style.left = offsets.offsetTop + 'px';
-            minusLeft.style.top = offsets.offsetLeft + 'px';
+            if  (inCenterSquares[i] === e.target) {
+
+                currentRow = e.target.parentNode;
+                currentInnerDiv = e.target;
+
+                minusTop.style.left = offsets.offsetTop + 'px';
+                minusLeft.style.top = offsets.offsetLeft + 'px';
+
+            }
+
         }
 
     });
@@ -187,11 +177,6 @@ window.onload = (e) => {
         minusLeft.style.visibility = 'hidden';
 
     });
-
-
-    //TODO чтобы избавиться от data-action можно использовать часть кода написанного с использованием prototype.filter.call
-    // делать обход массива и проверять равен ли e.target текущему эллементу массива
-
 
     center.addEventListener('mouseout', (e) => {
         minusTop.style.visibility = 'hidden';
