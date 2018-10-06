@@ -1,4 +1,5 @@
 /*Main styles*/
+
 .squeres-folder {
     display: flex;
     margin: 100px;
@@ -30,18 +31,12 @@
     position: relative;
 }
 
-.up, .bottom {
-    transform: translateX(50px);
-}
-
 .up .squere {
-    left: 3px;
-    bottom: -3px;
+    transform: translate(105%, 2px);
 }
 
 .left .squere {
-    top: 3px;
-    left: -1px;
+    transform: translate(-2px,6%);
 }
 
 .wrapper {
@@ -49,13 +44,11 @@
 }
 
 .right .squere {
-    left: 1px;
-    top: 3px;
+    transform: translate(2px,6%);
 }
 
 .bottom .squere {
-    top: 1px;
-    left: 3px;
+    transform: translate(105%,2px);
 }
 
 /*Inner wrapper*/
