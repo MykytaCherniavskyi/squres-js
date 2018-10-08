@@ -25,7 +25,6 @@ window.onload = (e) => {
                 row: 0
             };
 
-
             //Events
             this.plusBottom.onclick = this.addRow.bind(this);
 
@@ -143,8 +142,12 @@ window.onload = (e) => {
             const target = e.target;
 
             if (target === this.center
-                || target === target.parentElement
-                || target.classList.contains('squere')) {
+                || target.className === 'squere'
+                || target.className === 'row'
+                || target.className === 'squere squere-minus') {
+
+                console.log(target);
+                console.log('Фокус');
 
                 const rowsL = this.center.childElementCount;
                 const divsL = this.center.firstElementChild.childElementCount;
@@ -153,17 +156,13 @@ window.onload = (e) => {
                 else this.minusLeft.style.visibility = 'hidden';
                 if  (divsL > 1) this.minusTop.style.visibility = 'visible';
                 else this.minusTop.style.visibility = 'hidden';
-                if (target.className === 'squere squere-plus') {
-                    this.minusLeft.style.visibility = 'hidden';
-                    this.minusTop.style.visibility = 'hidden';
-                }
 
                 this.offsets.offsetLeft = e .target.getBoundingClientRect().top - this.center.getBoundingClientRect().top - 3;
                 this.offsets.offsetTop = e.target.getBoundingClientRect().left - this.center.getBoundingClientRect().left - 3;
 
                 //Фильтрация чисто элементов центральной таблицы (контролы удалены)
-                let allSquares = this.table.getElementsByClassName('squere');
-                let inCenterSquares = Array.prototype.filter.call(allSquares, function(allSquares){
+                const allSquares = this.table.getElementsByClassName('squere');
+                const inCenterSquares = Array.prototype.filter.call(allSquares, function(allSquares){
                     return allSquares.className === 'squere';
                 });
 
@@ -181,6 +180,9 @@ window.onload = (e) => {
 
                 }
 
+            } else {
+                this.minusLeft.style.visibility = 'hidden';
+                this.minusTop.style.visibility = 'hidden';
             }
 
         }
@@ -189,13 +191,12 @@ window.onload = (e) => {
 
             const target = e.target;
 
-            if (target !== this.center
-                || target.className !== 'squere'
-                || target.className !== 'row') {
+            if (!(target === this.center
+                || target.className === 'squere'
+                || target.className === 'row')) {
 
                 this.minusLeft.style.visibility = 'hidden';
                 this.minusTop.style.visibility = 'hidden';
-
 
             }
 
