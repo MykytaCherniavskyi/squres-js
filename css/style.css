@@ -31,12 +31,18 @@
     position: relative;
 }
 
+.up, .bottom {
+    transform: translateX(50px);
+}
+
 .up .squere {
-    transform: translate(105%, 2px);
+    left: 3px;
+    bottom: -2px;
 }
 
 .left .squere {
-    transform: translate(-2px,6%);
+    top: 3px;
+    left: -2px;
 }
 
 .wrapper {
@@ -44,11 +50,13 @@
 }
 
 .right .squere {
-    transform: translate(2px,6%);
+    left: 2px;
+    top: 3px;
 }
 
 .bottom .squere {
-    transform: translate(105%,2px);
+    top: 2px;
+    left: 3px;
 }
 
 /*Inner wrapper*/
@@ -74,8 +82,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    margin-left: -7px;
-    margin-top: -1.5px;
+    transform: translate(-50%,-50%);
     width: 14px;
     height: 3px;
     background-color: white;
@@ -88,7 +95,8 @@
 }
 
 .squere-plus::before {
-    transform: rotate(90deg);
+    width: 3px;
+    height: 14px;
 }
 
 .squere-plus:hover {

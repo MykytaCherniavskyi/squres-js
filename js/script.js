@@ -2,19 +2,18 @@ window.onload = (e) => {
 
     class Table {
 
-        constructor (idElement){
-
+        constructor (matrixWrapper){
             //Controls
-            this.table = document.getElementById(idElement);
+            this.matrixWrapper = matrixWrapper;
 
-            this.minusTop = this.table.getElementsByClassName('up')[0].firstElementChild;
-            this.minusLeft = this.table.getElementsByClassName('left')[0].firstElementChild;
-            this.plusRight = this.table.getElementsByClassName('right')[0].firstElementChild;
-            this.plusBottom = this.table.getElementsByClassName('bottom')[0].firstElementChild;
+            this.minusTop = this.matrixWrapper.querySelector('.up').firstElementChild;
+            this.minusLeft = this.matrixWrapper.querySelector('.left').firstElementChild;
+            this.plusRight = this.matrixWrapper.querySelector('.right').firstElementChild;
+            this.plusBottom = this.matrixWrapper.querySelector('.bottom').firstElementChild;
 
             //Environment
-            this.center = this.table.querySelector('.center');
-            this.rows = this.table.getElementsByClassName('row');
+            this.matrix = this.matrixWrapper.querySelector('.center');
+            this.rows = this.matrixWrapper.getElementsByClassName('row');
 
             this.offsets = {
                 offsetLeft: 0,
@@ -34,31 +33,31 @@ window.onload = (e) => {
 
             this.minusTop.onclick = this.removeColumn.bind(this);
 
-            this.table.onmouseover = this.tableOver.bind(this);
+            this.matrixWrapper.onmouseover = this.tableOver.bind(this);
 
-            this.table.onmouseout = this.tableOut.bind(this);
+            this.matrixWrapper.onmouseout = this.tableOut.bind(this);
 
         }
 
-        createElement(type, outerItem, innerItem){
+        createElement(classElement){
 
             const div = document.createElement('div');
 
-            switch (type) {
+            switch (classElement) {
 
-                case 'div':
-                    div.classList.add(...outerItem);
+                case 'squere':
+                    div.classList.add(classElement);
                     return div;
                 case 'row':
                     //cloneNode = false для обратной совместимости firefox 13 и т.д.
                     const row = div.cloneNode(false);
-                    row.classList.add(...outerItem);
+                    row.classList.add(classElement);
 
-                    const count = this.center.firstElementChild.childElementCount;
+                    const count = this.matrix.firstElementChild.childElementCount;
 
                     for (let i = 0; i < count; i++) row.append(div.cloneNode(false));
 
-                    for (let div of row.children) div.classList.add(...innerItem);
+                    for (let div of row.children) div.classList.add('squere');
 
 
                     return row;
@@ -67,14 +66,8 @@ window.onload = (e) => {
         };
 
         addRow() {
-
-            let row = this.createElement('row',['row'],['squere']);
-            this.center.appendChild(row);
-            const count = this.rows.length;
-            if (count > 1) {
-                this.minusLeft.style.visibility = 'visible';
-            }
-
+            let row = this.createElement('row');
+            this.matrix.appendChild(row);
         }
 
         addColumn() {
@@ -82,12 +75,8 @@ window.onload = (e) => {
             const countRows = this.rows.length;
             for (let i = 0; i < countRows; i++) {
                 let row = this.rows[i];
-                let div = this.createElement('div',['squere']);
+                let div = this.createElement('squere');
                 row.appendChild(div);
-                const countRowChildren = this.rows[0].children.length;
-                if (countRowChildren > 1) {
-                    this.minusTop.style.visibility = 'visible';
-                }
             }
 
         }
@@ -97,21 +86,16 @@ window.onload = (e) => {
             //Проверка, чтобы не удалялась последняя строка
             if (this.rows.length === 1) return false;
 
+
             let row = this.rows[this.positions.row];
+            this.positions.row = NaN;
 
-            if (row == null) row = this.rows[this.rows.length - 1];
-
-            if (row.nextElementSibling == null) {
-                this.offsets.offsetLeft = e.target.getBoundingClientRect().top - this.center.getBoundingClientRect().top;
-                this.minusLeft.style.top = this.offsets.offsetLeft - 55 + 'px';
-            }
-
+            if (typeof row === 'undefined') return false;
 
             row.remove();
 
-            //Скрытие контрола при последней строке
-            if (this.rows.length === 1) this.minusLeft.style.visibility = 'hidden';
-
+            this.minusLeft.style.visibility = 'hidden';
+            this.minusTop.style.visibility = 'hidden';
         }
 
         removeColumn(e) {
@@ -122,18 +106,14 @@ window.onload = (e) => {
 
                 let div = row.children[this.positions.div];
 
-                if (div == null) div = row.children[row.children.length - 1];
-
-                if (div.nextElementSibling == null) {
-                    this.offsets.offsetTop = e.target.getBoundingClientRect().left - this.center.getBoundingClientRect().left;
-                    this.minusTop.style.left = this.offsets.offsetTop - 54.5 + 'px';
-                }
+                if (typeof div === 'undefined') return false;
 
                 div.remove();
 
-                if (row.children.length <= 1) this.minusTop.style.visibility = 'hidden';
-
             }
+            this.positions.div = NaN;
+            this.minusTop.style.visibility = 'hidden';
+            this.minusLeft.style.visibility = 'hidden';
 
         }
 
@@ -141,38 +121,35 @@ window.onload = (e) => {
 
             const target = e.target;
 
-            if (target === this.center
+            if (target === this.matrix
                 || target.className === 'squere'
                 || target.className === 'row'
                 || target.className === 'squere squere-minus') {
 
-                console.log(target);
-                console.log('Фокус');
+                const rowsCount = this.rows.length;
+                const cellCount = this.rows[0].childElementCount;
 
-                const rowsL = this.center.childElementCount;
-                const divsL = this.center.firstElementChild.childElementCount;
-
-                if  (rowsL > 1) this.minusLeft.style.visibility = 'visible';
+                if  (rowsCount > 1) this.minusLeft.style.visibility = 'visible';
                 else this.minusLeft.style.visibility = 'hidden';
-                if  (divsL > 1) this.minusTop.style.visibility = 'visible';
+                if  (cellCount > 1) this.minusTop.style.visibility = 'visible';
                 else this.minusTop.style.visibility = 'hidden';
 
-                this.offsets.offsetLeft = e .target.getBoundingClientRect().top - this.center.getBoundingClientRect().top - 3;
-                this.offsets.offsetTop = e.target.getBoundingClientRect().left - this.center.getBoundingClientRect().left - 3;
+                this.offsets.offsetLeft = target.getBoundingClientRect().top - this.matrix.getBoundingClientRect().top;
+                this.offsets.offsetTop = target.getBoundingClientRect().left - this.matrix.getBoundingClientRect().left;
 
                 //Фильтрация чисто элементов центральной таблицы (контролы удалены)
-                const allSquares = this.table.getElementsByClassName('squere');
+                const allSquares = this.matrixWrapper.getElementsByClassName('squere');
                 const inCenterSquares = Array.prototype.filter.call(allSquares, function(allSquares){
                     return allSquares.className === 'squere';
                 });
 
                 // Проверяю, что фокус именно на эллементе таблицы
-                if  (inCenterSquares.includes(e.target)) {
+                if  (inCenterSquares.includes(target)) {
 
-                    const currentRow = e.target.parentElement;
-                    const currentInnerDiv = e.target;
+                    const currentRow = target.parentElement;
+                    const currentInnerDiv = target;
 
-                    this.positions.row = Array.from(this.center.children).indexOf(currentRow);
+                    this.positions.row = Array.from(this.matrix.children).indexOf(currentRow);
                     this.positions.div = Array.from(currentRow.children).indexOf(currentInnerDiv);
 
                     this.minusTop.style.left = this.offsets.offsetTop + 'px';
@@ -191,7 +168,7 @@ window.onload = (e) => {
 
             const target = e.target;
 
-            if (!(target === this.center
+            if (!(target === this.matrix
                 || target.className === 'squere'
                 || target.className === 'row')) {
 
@@ -205,7 +182,7 @@ window.onload = (e) => {
 
     }
 
-
-    const t1 = new Table('first');
+    let matrixArr = Array.from(document.getElementsByClassName('squeres-folder'));
+    matrixArr.forEach( matrix => new Table(matrix))
 
 };
