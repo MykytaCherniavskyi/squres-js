@@ -6,10 +6,10 @@ window.onload = (e) => {
             //Controls
             this.matrixWrapper = matrixWrapper;
 
-            this.minusTop = this.matrixWrapper.querySelector('.up').firstElementChild;
-            this.minusLeft = this.matrixWrapper.querySelector('.left').firstElementChild;
-            this.plusRight = this.matrixWrapper.querySelector('.right').firstElementChild;
-            this.plusBottom = this.matrixWrapper.querySelector('.bottom').firstElementChild;
+            this.minusTop = this.matrixWrapper.querySelector('.up .squere-minus');
+            this.minusLeft = this.matrixWrapper.querySelector('.left .squere-minus');
+            this.plusRight = this.matrixWrapper.querySelector('.right .squere-plus');
+            this.plusBottom = this.matrixWrapper.querySelector('.bottom .squere-plus');
 
             //Environment
             this.matrix = this.matrixWrapper.querySelector('.center');
@@ -39,34 +39,31 @@ window.onload = (e) => {
 
         }
 
-        createElement(classElement){
+        createDiv(classElement) {
+            const div = document.createElement('div');
+            div.classList.add(classElement);
+            return div;
+        }
+
+        createRow(classElement){
 
             const div = document.createElement('div');
 
-            switch (classElement) {
+            const row = div.cloneNode(false);
+            row.classList.add(classElement);
 
-                case 'squere':
-                    div.classList.add(classElement);
-                    return div;
-                case 'row':
-                    //cloneNode = false для обратной совместимости firefox 13 и т.д.
-                    const row = div.cloneNode(false);
-                    row.classList.add(classElement);
+            const count = this.matrix.firstElementChild.childElementCount;
 
-                    const count = this.matrix.firstElementChild.childElementCount;
+            for (let i = 0; i < count; i++) row.append(div.cloneNode(false));
 
-                    for (let i = 0; i < count; i++) row.append(div.cloneNode(false));
-
-                    for (let div of row.children) div.classList.add('squere');
+            for (let div of row.children) div.classList.add('squere');
 
 
-                    return row;
-
-            }
+            return row;
         };
 
         addRow() {
-            let row = this.createElement('row');
+            let row = this.createRow('row');
             this.matrix.appendChild(row);
         }
 
@@ -75,45 +72,49 @@ window.onload = (e) => {
             const countRows = this.rows.length;
             for (let i = 0; i < countRows; i++) {
                 let row = this.rows[i];
-                let div = this.createElement('squere');
+                let div = this.createDiv('squere');
                 row.appendChild(div);
             }
 
         }
 
         removeRow(e) {
-
-            //Проверка, чтобы не удалялась последняя строка
-            if (this.rows.length === 1) return false;
-
-
-            let row = this.rows[this.positions.row];
-            this.positions.row = NaN;
-
-            if (typeof row === 'undefined') return false;
-
-            row.remove();
-
             this.minusLeft.style.visibility = 'hidden';
             this.minusTop.style.visibility = 'hidden';
+            //Проверка, чтобы не удалялась последняя строка
+
+            setTimeout(() => {
+                if (this.rows.length === 1) return false;
+
+                let row = this.rows[this.positions.row];
+                this.positions.row = NaN;
+
+                if (typeof row === 'undefined') return false;
+
+                row.remove();
+            },200);
+
         }
 
         removeColumn(e) {
-
-            for (let row of this.rows) {
-
-                if (row.children.length === 1) return false;
-
-                let div = row.children[this.positions.div];
-
-                if (typeof div === 'undefined') return false;
-
-                div.remove();
-
-            }
-            this.positions.div = NaN;
             this.minusTop.style.visibility = 'hidden';
             this.minusLeft.style.visibility = 'hidden';
+
+            setTimeout(() => {
+                for (let row of this.rows) {
+
+                    if (row.children.length === 1) return false;
+
+                    let div = row.children[this.positions.div];
+
+                    if (typeof div === 'undefined') return false;
+
+                    div.remove();
+
+                }
+                this.positions.div = NaN;
+            },200);
+
 
         }
 
